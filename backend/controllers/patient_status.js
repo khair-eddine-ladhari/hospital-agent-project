@@ -3,18 +3,19 @@ import Chat from "../models/Chat.js";
 import Patient from "../models/Patient.js";
 const MAX_HISTORY = 10;
 
-const PYTHON_SERVICE_URL = "http://localhost:5000";
+const PYTHON_SERVICE_URL = "http://localhost:5001";
 
 const patientStatusRouter = async (req, res) => {
   try {
-    const { message } = req.body;
+    const message = "what the status of the patient?";
+    const patientId = "6a343e0d341591d60033a9ac";
 
     // get or create chat for this user
-    let chat = await Chat.findOne({ userId: req.user._id });
+    let chat = await Chat.findOne({ userId: patientId });
 
     if (!chat) {
       chat = await Chat.create({
-        userId: req.user._id,
+        userId: patientId,
         messages: []
       });
     }
@@ -29,6 +30,10 @@ const patientStatusRouter = async (req, res) => {
 
     let response;
     const patient = await Patient.findById(patientId);
+   
+if (!patient) {
+  return res.status(404).json({ message: "Patient not found" });
+}
 
     try {
       const ragRes = await axios.post(`${PYTHON_SERVICE_URL}/chat`, {
@@ -40,14 +45,15 @@ const patientStatusRouter = async (req, res) => {
           
         }))
       });
+   
 
       response = ragRes.data.response;
 
       // save assistant response
-      chat.messages.push({
-        role: "assistant",
-        content: response
-      });
+    chat.messages.push({
+  role: "assistant",
+  content: typeof response === "object" ? JSON.stringify(response) : response  // ← fix
+});
 
       await chat.save();
 
@@ -55,6 +61,7 @@ const patientStatusRouter = async (req, res) => {
       console.error("AI service error:", ragErr.message);
       response = "Sorry, the AI service is currently unavailable.";
     }
+    
 
     res.json({ response });
 
