@@ -1,5 +1,3 @@
-
-
 import mongoose from "mongoose";
 
 const PatientSchema = new mongoose.Schema(
@@ -36,21 +34,29 @@ const PatientSchema = new mongoose.Schema(
       type: Number
     },
 
-    medications: [
-      {
-        name: String,
-        dosage: String,
-        frequency: String
-      }
-    ],
+  medications: [
+  {
+    name: String,
+    dosage: String,
+    frequency: String,
+    date: { type: Date, default: Date.now }   // ← add this
+  }
+],
 
     diagnoses: [
       {
         name: String,
+        icd10: String, // ← added: ICD-10 code for this diagnosis
         date: {
           type: Date,
           default: Date.now
         }
+      }
+    ],
+
+    symptoms: [
+      {
+        type: String
       }
     ],
 
