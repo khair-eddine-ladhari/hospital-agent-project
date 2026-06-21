@@ -5,7 +5,7 @@ const NOTE_SERVICE_URL = "http://localhost:5002";
 
 const structuringRouter = async (req, res) => {
   try {
-       const patientId="6a355eddcdcd5dcc5";
+       const patientId="507f1f77bcf86cd799439011";
     const note ="Patient presents with fever, cough, and fatigue for 3 days. Diagnosed with community-acquired pneumonia. Started on Azithromycin and Amoxicillin.";
 
     if (!patientId) return res.status(400).json({ message: "patientId is required" });

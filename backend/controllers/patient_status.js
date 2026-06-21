@@ -8,17 +8,13 @@ const PYTHON_SERVICE_URL = "http://localhost:5001";
 const patientStatusRouter = async (req, res) => {
   try {
     const message = "what the status of the patient?";
-    const patientId = "6a343e0d341591d60033a9ac";
+    const patientId = "507f1f77bcf86cd799439011";
 
     // get or create chat for this user
-    let chat = await Chat.findOne({ userId: patientId });
-
-    if (!chat) {
-      chat = await Chat.create({
-        userId: patientId,
-        messages: []
-      });
-    }
+    let chat = await Chat.findOne({ patientId });
+if (!chat) {
+  chat = await Chat.create({ patientId, messages: [] });
+}
 
     // push user message
     chat.messages.push({
@@ -29,7 +25,7 @@ const patientStatusRouter = async (req, res) => {
     await chat.save();
 
     let response;
-    const patient = await Patient.findById(patientId);
+    const patient = await Patient.findOne({ patientId })
    
 if (!patient) {
   return res.status(404).json({ message: "Patient not found" });
