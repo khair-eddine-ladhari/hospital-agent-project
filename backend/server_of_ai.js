@@ -5,6 +5,7 @@ import patientStatusRouter from './controllers/patient_status.js'
 import connectDB from './config/db.js'
 import structuringRouter from './controllers/diagnostics.js'
 import timelineRouter from "./controllers/timeline.js";
+import { servicesChatRouter, clearServicesHistoryRouter } from "./controllers/agent_faq.js";
 dotenv.config()
 connectDB()
 
@@ -29,6 +30,10 @@ app.post('/api/patientStatus', patientStatusRouter)  // ← use app.post directl
 app.post('/api/diagnostics', structuringRouter)  // ← use app.post directly
 
 app.get("/api/patient/:patientId/timeline", timelineRouter);
+
+
+app.post("/api/services-chat", servicesChatRouter);
+app.post("/api/services-chat/clear", clearServicesHistoryRouter);
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
