@@ -7,7 +7,8 @@ const MAX_HISTORY_MESSAGES = 10; // keep last 10 turns (5 user + 5 assistant)
 
 const servicesChatRouter = async (req, res) => {
   try {
-    const sessionId = currentPatient.patientId; // from your auth/login state
+    const { query } = req.body;
+    const sessionId = "507f1f77bcf86cd799439011"; // from your auth/login state
 
     if (!sessionId) {
       return res.status(400).json({ message: "sessionId is required" });

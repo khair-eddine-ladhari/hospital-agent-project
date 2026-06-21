@@ -6,6 +6,8 @@ import connectDB from './config/db.js'
 import structuringRouter from './controllers/diagnostics.js'
 import timelineRouter from "./controllers/timeline.js";
 import { servicesChatRouter, clearServicesHistoryRouter } from "./controllers/agent_faq.js";
+import { searchNotesRouter } from "./controllers/rag.js"; // import searchNotesRouter from "./controllers/rag.js";
+import confirmNoteRouter from "./controllers/confirmdiagnostic.js";
 dotenv.config()
 connectDB()
 
@@ -29,11 +31,26 @@ app.post('/api/patientStatus', patientStatusRouter)  // ← use app.post directl
 
 app.post('/api/diagnostics', structuringRouter)  // ← use app.post directly
 
+
+
+// --- 3. Confirm note (doctor reviews/edits, THIS saves) ---
+// Also triggers indexNoteForSearch() internally after save — not a separate route
+app.post("/api/confirm-note", confirmNoteRouter);
+
+
+
+
 app.get("/api/patient/:patientId/timeline", timelineRouter);
 
 
 app.post("/api/services-chat", servicesChatRouter);
 app.post("/api/services-chat/clear", clearServicesHistoryRouter);
+
+
+
+app.post("/api/search-notes", searchNotesRouter);
+
+
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
