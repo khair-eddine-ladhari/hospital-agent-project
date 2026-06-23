@@ -3,7 +3,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-
+import Navbar from "../../components/Navbar";
+const VITE_API_URL=import.meta.env.VITE_API_URL
 // ─── Scroll reveal hook ───────────────────────────────────────────────────────
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
@@ -93,12 +94,20 @@ function ChatWidget() {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/services-chat", {
+      const res = await axios.post(`${VITE_API_URL}/api/services-chat`, {
   query: text,
   history: [],
 });
       setTyping(false);
-      addMsg(res.data.response || "I'll connect you with our team. Call +216 71 000 000.", "bot");
+      console.log("API response:", res.data);
+      const reply = res.data.response?.answer 
+  || res.data.response 
+  || res.data.answer 
+  || "I'll connect you with our team. Call +216 71 000 000.";
+
+setTyping(false);
+addMsg(reply, "bot");
+
     } catch {
       setTyping(false);
       addMsg("I'm having trouble connecting. Please call +216 71 000 000 for immediate help.", "bot");
@@ -258,29 +267,8 @@ export default function Home() {
     <div className="min-h-screen bg-white text-gray-900 font-sans">
 
       {/* ── NAV ──────────────────────────────────────────────────────────── */}
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-10 py-4 bg-white/95 backdrop-blur border-b border-gray-100">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-teal-600 flex items-center justify-center">
-            <svg width="14" height="14" fill="none" stroke="#fff" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-            </svg>
-          </div>
-          <span className="text-base font-medium">MediCare AI</span>
-        </div>
-        <div className="hidden md:flex items-center gap-8">
-          {["Features", "How it works", "For doctors", "About"].map((l) => (
-            <a key={l} href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">{l}</a>
-          ))}
-        </div>
-        <div className="flex items-center gap-3">
-          <button className="text-sm text-gray-500 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
-            Sign in
-          </button>
-          <button className="text-sm font-medium bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors">
-            Get started free
-          </button>
-        </div>
-      </nav>
+      <Navbar/>
+      
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="max-w-3xl mx-auto px-6 pt-24 pb-16 text-center">
