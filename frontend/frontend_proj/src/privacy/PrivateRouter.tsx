@@ -1,14 +1,14 @@
 
 
-/*
-import { useContext } from "react";
-import { GlobalContext } from "../context/AuthContext";
-import Login from "../pages/Auth/Login";
+
+//import { useContext } from "react";
+
+import Login from "../pages/auth/Login";
 
 export default function PrivateRouter({ user, children }) {
-  const { loading } = useContext(GlobalContext);
+  //const { loading } = useContext(GlobalContext);
 
-  if (loading) return null; // ✅ wait for auth check to complete
+  //if (loading) return null; // ✅ wait for auth check to complete
   
   if (user.isconnected) {
     return children;
@@ -16,4 +16,4 @@ export default function PrivateRouter({ user, children }) {
     return <Login />;
   }
 }
-  */
+  

@@ -1,22 +1,41 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useContext } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/client/Home";
 import Login from "./pages/auth/Login";
 import Dashboard from "./pages/doctor/Dashboard";
+import PrivateRouter from './privacy/PrivateRouter.tsx';
+import PrivateRouterAdmin from './privacy/PrivateRouterAdmin.tsx';
+import ForceRedirect from './privacy/ForceRedirect.tsx';
+import Noaccess from "./pages/auth/Noaccess.tsx";
+import GlobalState, { GlobalContext } from "./context/AuthContext.tsx";
+
+function AppRoutes() {
+  const { user, loading } = useContext(GlobalContext)!;
+
+  if (loading) return null;
+
+  const userInfo = {
+    isconnected: !!user,
+    role: user?.role,
+  };
+
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/login" element={<ForceRedirect user={userInfo}><Login /></ForceRedirect>} />
+      <Route path="/doctor/dashboard" element={<PrivateRouter user={userInfo}><Dashboard /></PrivateRouter>} />
+      <Route path="/*" element={<Noaccess />} />
+    </Routes>
+  );
+}
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        {/* Client */}
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-
-         <Route path="/dashboard" element={<Dashboard />} />
-
-
-        
-
-      </Routes>
+      <GlobalState>
+        <AppRoutes />
+      </GlobalState>
     </BrowserRouter>
   );
 }

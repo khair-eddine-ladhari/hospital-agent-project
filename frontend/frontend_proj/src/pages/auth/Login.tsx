@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-const VITE_API_URL=import.meta.env.VITE_API_URL
+import { GlobalContext } from "../../context/AuthContext.tsx";
 
-
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 export default function DoctorLogin() {
   const navigate = useNavigate();
-
+  const { login } = useContext(GlobalContext)!;
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -28,16 +28,18 @@ export default function DoctorLogin() {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.post(`${VITE_API_URL}/api/auth/doctor/login`, form);
-      //setAuth(res.data.token, res.data.user);
-      navigate("/doctor/dashboard");
+      const res = await axios.post(`${VITE_API_URL}/api/auth/login`, form);
+      sessionStorage.setItem("token", res.data.token);
+      login(res.data);
+      if (res.data.role === "doctor") navigate("/doctor/dashboard");
+      else if (res.data.role === "admin") navigate("/admin/dashboard");
+      else navigate("/");
     } catch (err: any) {
       setError(err.response?.data?.message || "Invalid email or password.");
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'Inter', sans-serif" }}>
 
@@ -292,16 +294,7 @@ export default function DoctorLogin() {
             </div>
 
             {/* Remember me */}
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <input
-                type="checkbox"
-                id="remember"
-                style={{ width: 15, height: 15, accentColor: "#1D9E75", cursor: "pointer" }}
-              />
-              <label htmlFor="remember" style={{ fontSize: 13, color: "#6B7280", cursor: "pointer" }}>
-                Keep me signed in for 30 days
-              </label>
-            </div>
+          
 
             {/* Submit */}
             <button

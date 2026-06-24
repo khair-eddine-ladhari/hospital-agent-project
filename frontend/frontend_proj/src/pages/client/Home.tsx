@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
+import { useNavigate } from "react-router-dom";
 const VITE_API_URL=import.meta.env.VITE_API_URL
 // ─── Scroll reveal hook ───────────────────────────────────────────────────────
 function useReveal() {
@@ -263,6 +264,7 @@ const TESTIMONIALS = [
 
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function Home() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-white text-gray-900 font-sans">
 
@@ -291,8 +293,8 @@ export default function Home() {
         </Reveal>
         <Reveal delay={300}>
           <div className="flex items-center justify-center gap-3 flex-wrap">
-            <button className="text-sm font-medium bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg transition-colors">
-              Start for free
+            <button className="text-sm font-medium bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg transition-colors" onClick={() => navigate("/login")}>
+              Doctor Portal
             </button>
             <button className="text-sm font-medium text-gray-700 border border-gray-200 hover:bg-gray-50 px-6 py-3 rounded-lg transition-colors flex items-center gap-2">
               <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -424,8 +426,8 @@ export default function Home() {
               <h2 className="text-2xl font-medium text-white mb-2">Ready to reclaim your time?</h2>
               <p className="text-teal-100 text-sm leading-relaxed">Join 12,000+ clinicians who document smarter, not harder.</p>
             </div>
-            <button className="whitespace-nowrap bg-white text-teal-700 font-medium text-sm px-6 py-3 rounded-lg hover:opacity-90 transition-opacity flex-shrink-0">
-              Start for free — no credit card
+            <button className="whitespace-nowrap bg-white text-teal-700 font-medium text-sm px-6 py-3 rounded-lg hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => navigate("/login")}>
+              Doctor Portal
             </button>
           </div>
         </Reveal>

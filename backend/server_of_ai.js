@@ -8,6 +8,7 @@ import timelineRouter from "./controllers/timeline.js";
 import { servicesChatRouter, clearServicesHistoryRouter } from "./controllers/agent_faq.js";
 import { searchNotesRouter } from "./controllers/rag.js"; // import searchNotesRouter from "./controllers/rag.js";
 import confirmNoteRouter from "./controllers/confirmdiagnostic.js";
+import authRoutes from "./routes/auth.routes.js";
 dotenv.config()
 connectDB()
 
@@ -49,6 +50,32 @@ app.post("/api/services-chat/clear", clearServicesHistoryRouter);
 
 
 app.post("/api/search-notes", searchNotesRouter);
+
+
+
+
+
+
+
+
+// ── Routes
+app.use('/api/auth', authRoutes)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,10 +2,10 @@
 
 
 
-/*
 
 
-import Noaccess from "../pages/Noaccess";
+
+import Noaccess from "../pages/auth/Noaccess.tsx";
 
 export default function PrivateRouter({user, children}) {
   
@@ -18,4 +18,4 @@ export default function PrivateRouter({user, children}) {
 
   
 }
-    */
+    
