@@ -32,7 +32,7 @@ const NAV = [
 
 
 export default function DoctorLayout({ children }: { children: React.ReactNode }) {
-  const user = { name: "Sami Ben Salah", specialty: "Cardiologist", email: "sami@clinic.com" };
+  const { user } = useContext(GlobalContext)!;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -102,7 +102,7 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
                   <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2ZM12 8v8M8 12h8" />
                 </svg>
               </div>
-              <span style={{ color: "white", fontWeight: 700, fontSize: 16, letterSpacing: "-0.3px", whiteSpace: "nowrap" }}>
+              <span style={{ color: "white", fontWeight: 700, fontSize: 16, letterSpacing: "-0.3px", whiteSpace: "nowrap" }} onClick={() => navigate("/")}>
                 MedAssist
               </span>
             </div>

@@ -4,16 +4,23 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import DoctorLayout from "../../components/Doctorlayout"
+const VITE_API_URL = import.meta.env.VITE_API_URL;
+import { useContext } from "react";
+import { GlobalContext } from "../../context/AuthContext.tsx";
+
+
+
 
 interface Patient {
   _id: string;
-  name: string;
+  fullName: string;
   age: number;
   gender: "male" | "female";
-  condition: string;
-  lastVisit: string;
-  notesCount: number;
+  diagnoses: string[];
+  lastVisit?: string;
+  notesCount?: number;
   status: "stable" | "critical" | "follow-up";
+  assignedDoctor?: string;
 }
 
 const STATUS_STYLE: Record<string, { bg: string; color: string; label: string }> = {
@@ -23,8 +30,11 @@ const STATUS_STYLE: Record<string, { bg: string; color: string; label: string }>
 };
 
 export default function Dashboard() {
-const user = { name: "Sami Ben Salah", specialty: "Cardiologist" };
-const token = "mock-token";
+const { user } = useContext(GlobalContext)!;
+const token = sessionStorage.getItem("token");
+
+
+
 
   const navigate = useNavigate();
  // const { user, token } = useAuthStore();
@@ -32,21 +42,17 @@ const token = "mock-token";
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "stable" | "critical" | "follow-up">("all");
 
-  const [patients, setPatients] = useState<Patient[]>([
-  { _id: "1", name: "Khaled Mansouri", age: 45, gender: "male", condition: "Hypertension", lastVisit: "2026-06-20", notesCount: 3, status: "stable" },
-  { _id: "2", name: "Fatma Zahra", age: 32, gender: "female", condition: "Diabetes Type 2", lastVisit: "2026-06-22", notesCount: 1, status: "follow-up" },
-  { _id: "3", name: "Yassine Trabelsi", age: 58, gender: "male", condition: "Chest Pain", lastVisit: "2026-06-23", notesCount: 5, status: "critical" },
-  { _id: "4", name: "Amira Belhaj", age: 27, gender: "female", condition: "Migraine", lastVisit: "2026-06-18", notesCount: 2, status: "stable" },
-]);
+  const [patients, setPatients] = useState<Patient[]>([]);
 const [loading, setLoading] = useState(false); // set to false so skeletons don't show
 
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/doctor/patients", {
+        const res = await axios.get(`${VITE_API_URL}/api/doctor/patients`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setPatients(res.data);
+       
+        setPatients(res.data.patients || res.data);
       } catch {
         // keep empty
       } finally {
@@ -56,13 +62,13 @@ const [loading, setLoading] = useState(false); // set to false so skeletons don'
     fetchPatients();
   }, [token]);
 
-  const filtered = patients.filter((p) => {
-    const matchSearch =
-      p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.condition.toLowerCase().includes(search.toLowerCase());
-    const matchFilter = filter === "all" || p.status === filter;
-    return matchSearch && matchFilter;
-  });
+ const filtered = (Array.isArray(patients) ? patients : []).filter((p) => {
+  const matchSearch =
+    (p.fullName ?? "").toLowerCase().includes(search.toLowerCase()) ||
+    (p.diagnoses?.[0] ?? "").toLowerCase().includes(search.toLowerCase());
+  const matchFilter = filter === "all" || p.status === filter;
+  return matchSearch && matchFilter;
+});
 
   const stats = {
     total: patients.length,
@@ -222,14 +228,14 @@ const [loading, setLoading] = useState(false); // set to false so skeletons don'
                   fontSize: 15, fontWeight: 700,
                   color: patient.gender === "female" ? "#9D174D" : "#0F6E56",
                 }}>
-                  {patient.name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()}
+                  {(patient.fullName ?? "").split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
                 </div>
 
                 {/* Info */}
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
                     <p style={{ fontWeight: 600, fontSize: 14, color: "#111", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                      {patient.name}
+                      {patient.fullName}
                     </p>
                     <span style={{
                       fontSize: 11, fontWeight: 500, padding: "2px 8px",
@@ -239,7 +245,7 @@ const [loading, setLoading] = useState(false); // set to false so skeletons don'
                     </span>
                   </div>
                   <p style={{ color: "#6B7280", fontSize: 13, margin: 0 }}>
-                    {patient.age} yrs · {patient.gender} · {patient.condition}
+                    {patient.age} yrs · {patient.gender} · {patient.diagnoses?.[0] ?? "—"}
                   </p>
                 </div>
 

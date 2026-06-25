@@ -8,7 +8,7 @@ import PrivateRouterAdmin from './privacy/PrivateRouterAdmin.tsx';
 import ForceRedirect from './privacy/ForceRedirect.tsx';
 import Noaccess from "./pages/auth/Noaccess.tsx";
 import GlobalState, { GlobalContext } from "./context/AuthContext.tsx";
-
+import PatientDetail from "./pages/doctor/PatientDetail.tsx";
 function AppRoutes() {
   const { user, loading } = useContext(GlobalContext)!;
 
@@ -25,6 +25,7 @@ function AppRoutes() {
       <Route path="/home" element={<Home />} />
       <Route path="/login" element={<ForceRedirect user={userInfo}><Login /></ForceRedirect>} />
       <Route path="/doctor/dashboard" element={<PrivateRouter user={userInfo}><Dashboard /></PrivateRouter>} />
+      <Route path="/doctor/patient/:id"  element={<PrivateRouter user={userInfo}><PatientDetail /></PrivateRouter>} />
       <Route path="/*" element={<Noaccess />} />
     </Routes>
   );

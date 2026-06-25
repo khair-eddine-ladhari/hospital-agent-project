@@ -9,6 +9,8 @@ import { servicesChatRouter, clearServicesHistoryRouter } from "./controllers/ag
 import { searchNotesRouter } from "./controllers/rag.js"; // import searchNotesRouter from "./controllers/rag.js";
 import confirmNoteRouter from "./controllers/confirmdiagnostic.js";
 import authRoutes from "./routes/auth.routes.js";
+import patinetsRouter from "./routes/patient.router.js";
+
 dotenv.config()
 connectDB()
 
@@ -30,7 +32,7 @@ app.use(cors({
 
 app.post('/api/patientStatus', patientStatusRouter)  // ← use app.post directly
 
-app.post('/api/diagnostics', structuringRouter)  // ← use app.post directly
+app.post("/api/doctor/structure-note", structuringRouter); // ✅ add this line // ← use app.post directly
 
 
 
@@ -60,7 +62,7 @@ app.post("/api/search-notes", searchNotesRouter);
 
 // ── Routes
 app.use('/api/auth', authRoutes)
-
+app.use('/api/',patinetsRouter)
 
 
 

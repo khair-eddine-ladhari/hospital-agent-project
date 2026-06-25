@@ -1,48 +1,63 @@
-import { indexNoteForSearch } from "./rag.js"; // import at the top of the file
+import { indexNoteForSearch } from "./rag.js";
 import Patient from "../models/Patient.js";
+
 const confirmNoteRouter = async (req, res) => {
   try {
-    const { patientId, rawNote, symptoms, diagnoses, medications } = req.body;
+    const { patientId, rawNote, structured } = req.body;
+    // structured = { symptoms, diagnosis, medications, icd10 }
 
-    const patient = await Patient.findOne({ patientId });
-    if (!patient) return res.status(404).json({ message: "Patient not 1 found" });
+    const patient = await Patient.findById(patientId); // ✅ use _id
+    if (!patient) return res.status(404).json({ message: "Patient not found" });
 
-    const summary = [
-      rawNote.trim(),
-      "",
-      `Symptoms: ${symptoms?.length ? symptoms.join(", ") : "none"}`,
-    ].join("\n");
+    // ✅ build the note using correct schema shape
+    const newNoteData = {
+      text: rawNote,
+      structured: {
+        symptoms:    structured?.symptoms    ?? [],
+        diagnosis:   structured?.diagnosis   ?? [],
+        medications: structured?.medications ?? [],
+        icd10:       structured?.icd10       ?? null,
+      },
+    };
 
-    patient.notes.push({ content: summary });
-    if (diagnoses?.length) {
-      patient.diagnoses.push(...diagnoses.map(name => ({ name })));
+    patient.notes.push(newNoteData);
+
+    // ✅ merge into patient-level arrays without duplicates
+    if (structured?.diagnosis?.length) {
+      const existing = new Set(patient.diagnoses);
+      structured.diagnosis.forEach(d => existing.add(d));
+      patient.diagnoses = [...existing];
     }
-    if (medications?.length) {
-      patient.medications.push(...medications.map(name => ({ name })));
+    if (structured?.medications?.length) {
+      const existing = new Set(patient.medications);
+      structured.medications.forEach(m => existing.add(m));
+      patient.medications = [...existing];
+    }
+    if (structured?.symptoms?.length) {
+      const existing = new Set(patient.symptoms);
+      structured.symptoms.forEach(s => existing.add(s));
+      patient.symptoms = [...existing];
     }
 
+    patient.lastVisit = new Date();
     await patient.save();
 
-    // ↓ THIS is the call. Grab the note that was just added — Mongoose
-    // auto-assigns it an _id once patient.save() runs.
-    const newNote = patient.notes[patient.notes.length - 1];
+    const savedNote = patient.notes[patient.notes.length - 1];
 
+    // fire-and-forget RAG indexing
     indexNoteForSearch({
-      noteId: newNote._id.toString(),
-      patientId: patient.patientId,
-      patientName: patient.fullName,   // adjust to your actual schema field
-      content: summary,
-      date: newNote.createdAt,
-      doctor: req.body.doctor || "unknown",
+      noteId:      savedNote._id.toString(),
+      patientId:   patient._id.toString(),
+      patientName: patient.fullName,
+      content:     rawNote,
+      date:        savedNote.createdAt,
+      doctor:      req.body.doctor ?? "unknown",
     });
-    // ← notice: no `await` here. Fire-and-forget on purpose — indexing
-    // shouldn't make the doctor wait before getting "Saved" back.
 
-    res.json({ message: "Saved", patient });
+    res.json({ message: "Saved", note: savedNote });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-
-export default confirmNoteRouter
+export default confirmNoteRouter;

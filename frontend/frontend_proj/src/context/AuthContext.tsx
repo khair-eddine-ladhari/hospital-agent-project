@@ -10,6 +10,8 @@ interface User {
   specialty?: string;
 }
 
+
+
 interface GlobalContextType {
   user: User | null;
   login: (userData: User) => void;
