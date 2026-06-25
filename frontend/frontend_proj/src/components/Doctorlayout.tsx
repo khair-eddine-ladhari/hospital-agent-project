@@ -3,7 +3,8 @@
 
 import { useState } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-
+import { useContext } from "react";
+import { GlobalContext } from "../context/AuthContext.tsx";
 
 const NAV = [
   {
@@ -32,15 +33,17 @@ const NAV = [
 
 export default function DoctorLayout({ children }: { children: React.ReactNode }) {
   const user = { name: "Sami Ben Salah", specialty: "Cardiologist", email: "sami@clinic.com" };
-  const logout = () => {};
+
   const navigate = useNavigate();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+    const { logout } = useContext(GlobalContext)!;
 
   const handleLogout = () => {
+    
     logout();
-    navigate("/doctor/login");
+    navigate("/login");
   };
 
   const initials = user?.name

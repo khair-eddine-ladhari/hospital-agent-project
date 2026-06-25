@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
+
 const VITE_API_URL=import.meta.env.VITE_API_URL
 // ─── Scroll reveal hook ───────────────────────────────────────────────────────
 function useReveal() {

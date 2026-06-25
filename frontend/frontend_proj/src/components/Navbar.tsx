@@ -1,7 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { GlobalContext } from "../context/AuthContext.tsx";
+
+// inside the component:
 
 
 const Navbar = () => {
+  const { user } = useContext(GlobalContext)!;
   const navigate = useNavigate();
     return (
       <nav className="sticky top-0 z-50 flex items-center justify-between px-10 py-4 bg-white/95 backdrop-blur border-b border-gray-100">
@@ -19,9 +24,15 @@ const Navbar = () => {
           ))}
         </div>
         <div className="flex items-center gap-3">
-          <button className="text-sm text-gray-500 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors " onClick={() => navigate("/login")}>
-            Sign in
-          </button>
+          
+         {!user && (
+  <button
+    className="text-sm text-gray-500 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+    onClick={() => navigate("/doctor/login")}
+  >
+    Doctor Portal
+  </button>
+)}
           
           <button className="text-sm font-medium bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors" onClick={() => navigate("/login")}>
             Doctor Portal
