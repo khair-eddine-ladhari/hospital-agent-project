@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import patientStatusRouter from './controllers/patient_status.js'
+
 import connectDB from './config/db.js'
 import structuringRouter from './controllers/diagnostics.js'
 import timelineRouter from "./controllers/timeline.js";
@@ -30,7 +30,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"],
 }))
 
-app.post('/api/patientStatus', patientStatusRouter)  // ← use app.post directly
+
 
 app.post("/api/doctor/structure-note", structuringRouter); // ✅ add this line // ← use app.post directly
 
@@ -63,8 +63,6 @@ app.post("/api/search-notes", searchNotesRouter);
 // ── Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/',patinetsRouter)
-
-
 
 
 

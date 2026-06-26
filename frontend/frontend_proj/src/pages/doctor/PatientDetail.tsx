@@ -131,7 +131,7 @@ export default function PatientDetail() {
         const res = await axios.get(`${VITE_API_URL}/api/doctor/patient/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log("Patient response:", res.data); // 👈 add this
+
         setPatient(res.data.patient || res.data);
       } catch {
         // handle error
@@ -217,6 +217,30 @@ export default function PatientDetail() {
   };
 
   // ── AI Chat ──
+
+  // ── Load chat history on mount ──
+useEffect(() => {
+  const fetchChatHistory = async () => {
+    try {
+      const res = await axios.get(
+        `${VITE_API_URL}/api/doctor/patient/${id}/chat`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      // map DB messages to ChatMessage shape
+      setChatHistory(
+        (res.data.messages ?? []).map((m: any) => ({
+          role: m.role,
+          content: m.content,
+        }))
+      );
+    } catch {
+      // keep empty on error
+    }
+  };
+  fetchChatHistory();
+}, [id, token]);
+
+
   const handleChat = async () => {
     if (!chatInput.trim() || !patient) return;
     const userMsg: ChatMessage = { role: "user", content: chatInput };
@@ -227,7 +251,7 @@ export default function PatientDetail() {
     try {
       const res = await axios.post(
         `${VITE_API_URL}/api/doctor/patient/${id}/chat`,
-        { query: chatInput, patientData: patient, history: chatHistory },
+        { query: chatInput, patientData: patient },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const parsed = res.data.response;
