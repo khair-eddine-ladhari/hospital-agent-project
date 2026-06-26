@@ -85,3 +85,37 @@ export const addPatientNote = async (req, res) => {
     res.status(500).json({ message: "Server error.", error: err.message });
   }
 };
+
+
+
+export const createPatient = async (req, res) => {
+  try {
+    const { fullName } = req.body;
+    if (!fullName?.trim()) {
+      return res.status(400).json({ message: "fullName is required" });
+    }
+    const patient = await Patient.create({
+      fullName: fullName.trim(),
+      assignedDoctor: req.user._id,
+      status: "stable",
+    });
+    res.status(201).json({ patient });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const deletePatient = async (req, res) => {
+  try {
+    const patient = await Patient.findOneAndDelete({
+      _id: req.params.id,
+      assignedDoctor: req.user._id, // doctor can only delete their own
+    });
+    if (!patient) return res.status(404).json({ message: "Patient not found" });
+    res.json({ message: "Patient deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+

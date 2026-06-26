@@ -95,6 +95,7 @@ def search_notes():
     try:
         data = request.get_json()
         question = (data.get("question") or "").strip()
+        doctor = data.get("doctor", "")
         top_k = data.get("topK", 5)
 
         if not question:
@@ -106,6 +107,7 @@ def search_notes():
             vector=query_vector,
             top_k=top_k,
             include_metadata=True,
+            filter={"doctor": {"$eq": doctor}},
         )
         matches = results.get("matches", [])
 

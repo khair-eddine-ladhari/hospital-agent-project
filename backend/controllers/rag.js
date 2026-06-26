@@ -36,9 +36,10 @@ export const searchNotesRouter = async (req, res) => {
     }
 
     const ragRes = await axios.post(`${RAG_SERVICE_URL}/search-notes`, {
-      question,
-      topK: 5,
-    });
+  question,
+  doctor: req.user._id.toString(), // 👈 only search this doctor's notes
+  topK: 5,
+});
 
     res.json(ragRes.data);
   } catch (err) {

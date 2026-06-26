@@ -8,6 +8,8 @@ const VITE_API_URL = import.meta.env.VITE_API_URL;
 import { useContext } from "react";
 import { GlobalContext } from "../../context/AuthContext.tsx";
 
+// 1. Import at the top
+import AddPatientModal from "./AddPatientModal";
 
 
 
@@ -84,6 +86,40 @@ const [loading, setLoading] = useState(false); // set to false so skeletons don'
     return "Good evening";
   };
 
+
+
+
+// 2. State (inside the component)
+const [showAddModal, setShowAddModal] = useState(false);
+
+// 3. Handler (inside the component)
+const handleAddPatient = async ({ firstName, lastName }: { firstName: string; lastName: string }) => {
+    console.log("Adding patient:", firstName, lastName); // 👈
+  console.log("URL:", VITE_API_URL);                  // 👈
+  console.log("Token:", token);                        // 👈
+
+  await axios.post(
+    `${VITE_API_URL}/api/doctor/patients`,
+    { fullName: `${firstName} ${lastName}` },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  const res = await axios.get(`${VITE_API_URL}/api/doctor/patients`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  setPatients(res.data.patients || res.data);
+};
+
+
+const handleDeletePatient = async (patientId: string, e: React.MouseEvent) => {
+  e.stopPropagation(); // prevent navigating to patient page
+  if (!confirm("Are you sure you want to delete this patient?")) return;
+  
+  await axios.delete(`${VITE_API_URL}/api/doctor/patients/${patientId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  setPatients((prev) => prev.filter((p) => p._id !== patientId));
+};
+
   return (
     <DoctorLayout>
     <div style={{ fontFamily: "'Inter', sans-serif" }}>
@@ -155,6 +191,26 @@ const [loading, setLoading] = useState(false); // set to false so skeletons don'
             onBlur={e => (e.target.style.borderColor = "#E5E7EB")}
           />
         </div>
+        
+
+
+<button
+  onClick={() => setShowAddModal(true)}
+  style={{
+    padding: "9px 16px", borderRadius: 9, fontSize: 13, fontWeight: 600,
+    border: "none", background: "#1D9E75", color: "white", cursor: "pointer",
+    display: "flex", alignItems: "center", gap: 6, marginLeft: "auto",
+  }}
+>
+  <svg width="13" height="13" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" viewBox="0 0 24 24">
+    <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+  </svg>
+  New patient
+</button>
+
+
+
+
 
         {/* Filter pills */}
         {(["all", "stable", "follow-up", "critical"] as const).map((f) => (
@@ -260,9 +316,39 @@ const [loading, setLoading] = useState(false); // set to false so skeletons don'
                 </div>
 
                 {/* Arrow */}
-                <svg width="16" height="16" fill="none" stroke="#D1D5DB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
-                  <path d="M9 18l6-6-6-6" />
-                </svg>
+               {/* Delete button + Arrow */}
+<div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+  <button
+    onClick={(e) => handleDeletePatient(patient._id, e)}
+    style={{
+      background: "none", border: "1.5px solid #FEE2E2",
+      borderRadius: 7, padding: "5px 7px", cursor: "pointer",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      transition: "all 0.15s",
+    }}
+    onMouseEnter={e => {
+      e.currentTarget.style.background = "#FEF2F2";
+      e.currentTarget.style.borderColor = "#DC2626";
+    }}
+    onMouseLeave={e => {
+      e.currentTarget.style.background = "none";
+      e.currentTarget.style.borderColor = "#FEE2E2";
+    }}
+  >
+    <svg width="14" height="14" fill="none" stroke="#DC2626" strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6l-1 14H6L5 6" />
+      <path d="M10 11v6M14 11v6" />
+      <path d="M9 6V4h6v2" />
+    </svg>
+  </button>
+
+  <svg width="16" height="16" fill="none" stroke="#D1D5DB" strokeWidth="2"
+    strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
+    <path d="M9 18l6-6-6-6" />
+  </svg>
+</div>
               </div>
             );
           })}
@@ -279,6 +365,13 @@ const [loading, setLoading] = useState(false); // set to false so skeletons don'
         }
       `}</style>
     </div>
+
+
+     <AddPatientModal
+        open={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onAdd={handleAddPatient}
+      />
     </DoctorLayout>
   );
 }

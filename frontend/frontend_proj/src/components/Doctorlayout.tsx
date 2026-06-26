@@ -19,7 +19,7 @@ const NAV = [
     ),
   },
   {
-    to: "/doctor/search",
+    to: "/doctor/notesresearch",
     label: "Note Search",
     icon: (
       <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
@@ -131,7 +131,7 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
         {!collapsed && (
           <div style={{ padding: "12px 12px 0" }}>
             <button
-              onClick={() => navigate("/doctor/dashboard")}
+              onClick={() => navigate("/home")}
               style={{
                 width: "100%", display: "flex", alignItems: "center", gap: 8,
                 padding: "9px 12px",
@@ -143,10 +143,8 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
               onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.22)")}
               onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.15)")}
             >
-              <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" viewBox="0 0 24 24">
-                <path d="M12 5v14M5 12h14" />
-              </svg>
-              New note
+            
+              Back to Home
             </button>
           </div>
         )}

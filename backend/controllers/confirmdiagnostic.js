@@ -51,7 +51,7 @@ const confirmNoteRouter = async (req, res) => {
       patientName: patient.fullName,
       content:     rawNote,
       date:        savedNote.createdAt,
-      doctor:      req.body.doctor ?? "unknown",
+      doctor: req.user?._id?.toString() ?? "unknown",
     });
 
     res.json({ message: "Saved", note: savedNote });

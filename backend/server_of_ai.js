@@ -10,6 +10,8 @@ import { searchNotesRouter } from "./controllers/rag.js"; // import searchNotesR
 import confirmNoteRouter from "./controllers/confirmdiagnostic.js";
 import authRoutes from "./routes/auth.routes.js";
 import patinetsRouter from "./routes/patient.router.js";
+import passport from "./middleware/passport.js";
+import rolesMiddleware from "./middleware/roles.middleware.js";
 
 dotenv.config()
 connectDB()
@@ -32,26 +34,26 @@ app.use(cors({
 
 
 
-app.post("/api/doctor/structure-note", structuringRouter); // ✅ add this line // ← use app.post directly
+app.post("/api/doctor/structure-note", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']),structuringRouter); // ✅ add this line // ← use app.post directly
 
 
 
 // --- 3. Confirm note (doctor reviews/edits, THIS saves) ---
 // Also triggers indexNoteForSearch() internally after save — not a separate route
-app.post("/api/confirm-note", confirmNoteRouter);
+app.post("/api/confirm-note", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']),confirmNoteRouter);
 
 
 
 
-app.get("/api/patient/:patientId/timeline", timelineRouter);
+app.get("/api/patient/:patientId/timeline", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']),timelineRouter);
 
 
-app.post("/api/services-chat", servicesChatRouter);
-app.post("/api/services-chat/clear", clearServicesHistoryRouter);
+app.post("/api/services-chat", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']),servicesChatRouter);
+app.post("/api/services-chat/clear", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']),clearServicesHistoryRouter);
 
 
 
-app.post("/api/search-notes", searchNotesRouter);
+app.post("/api/search-notes", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']) ,searchNotesRouter);
 
 
 

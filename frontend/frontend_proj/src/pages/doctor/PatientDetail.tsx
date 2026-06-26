@@ -7,7 +7,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { GlobalContext } from "../../context/AuthContext.tsx";
 import DoctorLayout from "../../components/Doctorlayout";
-
+import EditVitalsModal from "./EditVitalsModal";
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -97,6 +97,7 @@ function Spinner() {
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function PatientDetail() {
+  const [showVitalsModal, setShowVitalsModal] = useState(false);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useContext(GlobalContext)!;
@@ -307,6 +308,14 @@ useEffect(() => {
   const s = STATUS_STYLE[patient.status] || STATUS_STYLE.stable;
   const initials = (patient.fullName ?? "").split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
 
+const handleSaveVitals = async (vitals: { bloodPressure: string; heartRate: number | string; temperature: number | string; status: "stable" | "critical" | "follow-up" }) => {
+  await axios.put(
+    `${VITE_API_URL}/api/doctor/patients/${id}`,  // 👈 id not patientId
+    vitals,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+   setPatient(prev => prev ? { ...prev, ...vitals } : prev);
+};
   return (
     <DoctorLayout>
       <style>{`
@@ -373,8 +382,12 @@ useEffect(() => {
           </p>
         </div>
 
-        {/* Vitals chips */}
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+     {/* Vitals chips */}
+<div
+  onClick={() => setShowVitalsModal(true)}
+  title="Click to edit vitals"
+  style={{ display: "flex", gap: 10, flexWrap: "wrap", cursor: "pointer" }}
+>
           {[
             { label: "BP", value: patient.bloodPressure ?? "—", icon: "M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" },
             { label: "HR", value: patient.heartRate ? `${patient.heartRate} bpm` : "—", icon: "M22 12h-4l-3 9L9 3l-3 9H2" },
@@ -772,6 +785,18 @@ useEffect(() => {
           </div>
         </div>
       )}
+
+      <EditVitalsModal
+        open={showVitalsModal}
+        onClose={() => setShowVitalsModal(false)}
+        onSave={handleSaveVitals}
+        current={{
+          bloodPressure: patient.bloodPressure ?? "",
+          heartRate: patient.heartRate ?? "",
+          temperature: patient.temperature ?? "",
+          status: patient.status,
+        }}
+      />
     </DoctorLayout>
   );
 }
