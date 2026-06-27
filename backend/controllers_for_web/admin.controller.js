@@ -62,7 +62,7 @@ export const getDoctors = async (req, res) => {
 // Edit a doctor (name, specialty, schedule, isActive)
 export const updateDoctor = async (req, res) => {
   try {
-    const { name, specialty, schedule, isActive, password } = req.body
+    const { name,email, specialty, schedule, password } = req.body
 
     const doctor = await User.findOne({ _id: req.params.id, role: 'doctor' })
     if (!doctor) {
@@ -70,6 +70,7 @@ export const updateDoctor = async (req, res) => {
     }
 
     if (name)      doctor.name      = name
+    if (email)     doctor.email     = email
     if (specialty) doctor.specialty = specialty
     if (schedule)  doctor.schedule  = schedule
     if (typeof isActive === 'boolean') doctor.isActive = isActive
