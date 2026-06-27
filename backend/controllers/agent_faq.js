@@ -1,5 +1,5 @@
 import axios from "axios";
-import Doctor from "../models/doctor.js";
+import User from "../models/User.js";
 import ChatHistory from "../models/chathistory.js";
 
 const SERVICES_AGENT_URL = "http://localhost:5003";
@@ -29,10 +29,10 @@ const servicesChatRouter = async (req, res) => {
       content: m.content,
     }));
 
-    const doctors = await Doctor.find(
-      {},
-      { name: 1, specialty: 1, schedule: 1, _id: 0 }
-    ).lean();
+  const doctors = await User.find(
+  { role: 'doctor' },
+  { name: 1, email: 1, specialty: 1, schedule: 1, _id: 1 }
+).lean();
 
     let aiResponse;
     try {

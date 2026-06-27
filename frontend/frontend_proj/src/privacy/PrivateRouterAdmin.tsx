@@ -1,21 +1,15 @@
+import { ReactNode } from "react";
+import { Navigate } from "react-router-dom";
 
-
-
-
-
-
-
-import Noaccess from "../pages/auth/Noaccess.tsx";
-
-export default function PrivateRouter({user, children}) {
-  
-    if (!user) return null;
-    if (user.isconnected && user.role === 'admin' ){
-      return children;
-    } else {
-      return <Noaccess />;
-    }
-
-  
+interface Props {
+  user: { role: string } | null;
+  children: ReactNode;
 }
-    
+
+export default function PrivateRouterAdmin({ user, children }: Props) {
+  if (!user) return <Navigate to="/login" replace />;
+
+  if (user.role === "admin") return children;
+
+  return <Navigate to="/login" replace />;
+}

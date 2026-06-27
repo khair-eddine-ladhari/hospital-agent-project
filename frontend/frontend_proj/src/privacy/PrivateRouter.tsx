@@ -1,19 +1,17 @@
+import { ReactNode } from "react";
+import { Navigate } from "react-router-dom";
 
-
-
-//import { useContext } from "react";
-
-import Login from "../pages/auth/Login";
-
-export default function PrivateRouter({ user, children }) {
-  //const { loading } = useContext(GlobalContext);
-
-  //if (loading) return null; // ✅ wait for auth check to complete
-  
-  if (user.isconnected) {
-    return children;
-  } else {
-    return <Login />;
-  }
+interface Props {
+  user: { role: string } | null;
+  children: ReactNode;
 }
-  
+
+export default function PrivateRouter({ user, children }: Props) {
+  if (!user) return <Navigate to="/login" replace />;
+
+  if (user.role === "doctor" || user.role === "admin") {
+    return children;
+  }
+
+  return <Navigate to="/login" replace />;
+}

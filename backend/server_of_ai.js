@@ -13,6 +13,7 @@ import patinetsRouter from "./routes/patient.router.js";
 import passport from "./middleware/passport.js";
 import rolesMiddleware from "./middleware/roles.middleware.js";
 
+import adminRoutes from './routes/admin.router.js'
 dotenv.config()
 connectDB()
 
@@ -56,7 +57,7 @@ app.post("/api/services-chat/clear",clearServicesHistoryRouter);
 app.post("/api/doctor/search-notes", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']) ,searchNotesRouter);
 
 
-
+app.use('/api/admin', adminRoutes)
 
 
 

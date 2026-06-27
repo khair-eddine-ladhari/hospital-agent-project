@@ -10,24 +10,29 @@ import Noaccess from "./pages/auth/Noaccess.tsx";
 import GlobalState, { GlobalContext } from "./context/AuthContext.tsx";
 import PatientDetail from "./pages/doctor/PatientDetail.tsx";
 import NotesResearch from "./pages/doctor/NoteSearch.tsx";
+
+import DoctorForm from "./pages/admin/DoctorForm.tsx";
+import DoctorList from "./pages/admin/DoctorList.tsx";
+
 function AppRoutes() {
   const { user, loading } = useContext(GlobalContext)!;
-
+ console.log("USER:", user);
   if (loading) return null;
-
-  const userInfo = {
-    isconnected: !!user,
-    role: user?.role,
-  };
 
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/home" element={<Home />} />
-      <Route path="/login" element={<ForceRedirect user={userInfo}><Login /></ForceRedirect>} />
-      <Route path="/doctor/dashboard" element={<PrivateRouter user={userInfo}><Dashboard /></PrivateRouter>} />
-      <Route path="/doctor/patient/:id"  element={<PrivateRouter user={userInfo}><PatientDetail /></PrivateRouter>} />
-      <Route path="/doctor/notesresearch"  element={<PrivateRouter user={userInfo}><NotesResearch /></PrivateRouter>} />
+      <Route path="/login" element={<ForceRedirect user={user}><Login /></ForceRedirect>} />
+      <Route path="/doctor/dashboard" element={<PrivateRouter user={user}><Dashboard /></PrivateRouter>} />
+      <Route path="/doctor/patient/:id" element={<PrivateRouter user={user}><PatientDetail /></PrivateRouter>} />
+      <Route path="/doctor/notesresearch" element={<PrivateRouter user={user}><NotesResearch /></PrivateRouter>} />
+
+      <Route path="/admin/doctors" element={<PrivateRouterAdmin user={user}><DoctorList /></PrivateRouterAdmin>} />
+      <Route path="/admin/doctors/new" element={<PrivateRouterAdmin user={user}><DoctorForm /></PrivateRouterAdmin>} />
+      <Route path="/admin/doctors/:id/edit" element={<PrivateRouterAdmin user={user}><DoctorForm /></PrivateRouterAdmin>} />
+     
+
       <Route path="/*" element={<Noaccess />} />
     </Routes>
   );
