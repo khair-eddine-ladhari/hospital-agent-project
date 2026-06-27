@@ -84,7 +84,7 @@ export default function NoteSearch() {
     setResult(null);
     try {
       const res = await axios.post(
-        `${VITE_API_URL}/api/search-notes`,
+        `${VITE_API_URL}/api/doctor/search-notes`,
         { question: query, topK: 5 },
         { headers: { Authorization: `Bearer ${token}` } }
       );

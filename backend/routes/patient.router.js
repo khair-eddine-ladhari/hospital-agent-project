@@ -11,8 +11,9 @@ import rolesMiddleware from '../middleware/roles.middleware.js'
 import { getPatientById, getPatientNotes, addPatientNote } from "../controllers_for_web/patients.controller.js";
 import { getChatHistory, sendChatMessage } from "../controllers/patient_status.js";
 import { deletePatient } from "../controllers_for_web/patients.controller.js";
-
+import Patient from '../models/Patient.js'; // adjust path as needed
 import { createPatient } from "../controllers_for_web/patients.controller.js";
+import addstatus from '../controllers/addstatus.js'
 const router = express.Router()
 
 
@@ -42,18 +43,5 @@ router.delete("/doctor/patients/:id", passport.authenticate('jwt', { session: fa
 
 
 
-router.put("/doctor/patients/:id",  passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']), async (req, res) => {
-  try {
-    const { bloodPressure, heartRate, temperature, status } = req.body;
-    const patient = await Patient.findOneAndUpdate(
-      { _id: req.params.id, assignedDoctor: req.user._id },
-      { bloodPressure, heartRate, temperature, status },
-      { new: true }
-    );
-    if (!patient) return res.status(404).json({ message: "Patient not found" });
-    res.json({ patient });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+router.put("/doctor/patients/:id",  passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']),addstatus);
 export default router

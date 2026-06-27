@@ -40,7 +40,7 @@ app.post("/api/doctor/structure-note", passport.authenticate('jwt', { session: f
 
 // --- 3. Confirm note (doctor reviews/edits, THIS saves) ---
 // Also triggers indexNoteForSearch() internally after save — not a separate route
-app.post("/api/confirm-note", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']),confirmNoteRouter);
+app.post("/api/doctor/confirm-note", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']),confirmNoteRouter);
 
 
 
@@ -48,12 +48,12 @@ app.post("/api/confirm-note", passport.authenticate('jwt', { session: false }),r
 app.get("/api/patient/:patientId/timeline", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']),timelineRouter);
 
 
-app.post("/api/services-chat", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']),servicesChatRouter);
-app.post("/api/services-chat/clear", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']),clearServicesHistoryRouter);
+app.post("/api/services-chat",servicesChatRouter);
+app.post("/api/services-chat/clear",clearServicesHistoryRouter);
 
 
 
-app.post("/api/search-notes", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']) ,searchNotesRouter);
+app.post("/api/doctor/search-notes", passport.authenticate('jwt', { session: false }),rolesMiddleware(['admin', 'doctor']) ,searchNotesRouter);
 
 
 

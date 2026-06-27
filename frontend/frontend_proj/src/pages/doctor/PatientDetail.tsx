@@ -193,7 +193,7 @@ export default function PatientDetail() {
     setSavingNote(true);
     try {
      await axios.post(
-  `${VITE_API_URL}/api/confirm-note`,
+  `${VITE_API_URL}/api/doctor/confirm-note`,
   {
     patientId: id,           // the _id from useParams
     rawNote,
@@ -314,7 +314,7 @@ const handleSaveVitals = async (vitals: { bloodPressure: string; heartRate: numb
     vitals,
     { headers: { Authorization: `Bearer ${token}` } }
   );
-   setPatient(prev => prev ? { ...prev, ...vitals } : prev);
+   setPatient(prev => prev ? { ...prev, ...vitals } as Patient : prev);
 };
   return (
     <DoctorLayout>
