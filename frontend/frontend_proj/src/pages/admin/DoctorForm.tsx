@@ -78,7 +78,7 @@ export default function DoctorForm() {
     <div className="min-h-screen bg-gray-50">
 
       {/* Header */}
-      <div className="bg-white border-b border-gray-100 px-8 py-5 flex items-center gap-4">
+      <div className="doctor-form-header bg-white border-b border-gray-100 px-8 py-5 flex items-center gap-4">
         <button onClick={() => navigate("/admin/doctors")} className="text-gray-400 hover:text-gray-700 transition-colors">
           <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -90,7 +90,7 @@ export default function DoctorForm() {
         </div>
       </div>
 
-      <div className="px-8 py-8 max-w-xl">
+      <div className="doctor-form-container px-8 py-8 max-w-xl">
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
           {/* Basic info */}
@@ -167,7 +167,7 @@ export default function DoctorForm() {
             )}
 
             {schedule.map((s, i) => (
-              <div key={i} className="flex items-center gap-2">
+              <div key={i} className="schedule-row flex items-center gap-2">
                 <select
                   value={s.day}
                   onChange={e => updateSchedule(i, "day", e.target.value)}
@@ -207,7 +207,7 @@ export default function DoctorForm() {
             </div>
           )}
 
-          <div className="flex gap-3">
+          <div className="doctor-form-actions flex gap-3">
             <button
               type="button"
               onClick={() => navigate("/admin/doctors")}

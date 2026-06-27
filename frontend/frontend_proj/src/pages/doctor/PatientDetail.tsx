@@ -348,7 +348,7 @@ const handleSaveVitals = async (vitals: { bloodPressure: string; heartRate: numb
       </button>
 
       {/* ── Patient header card ── */}
-      <div style={{
+      <div className="patient-header-card" style={{
         background: "white", borderRadius: 14, border: "1px solid #E5E7EB",
         padding: "20px 24px", marginBottom: 22,
         display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap",
@@ -384,6 +384,7 @@ const handleSaveVitals = async (vitals: { bloodPressure: string; heartRate: numb
 
      {/* Vitals chips */}
 <div
+  className="patient-vitals"
   onClick={() => setShowVitalsModal(true)}
   title="Click to edit vitals"
   style={{ display: "flex", gap: 10, flexWrap: "wrap", cursor: "pointer" }}
@@ -419,7 +420,7 @@ const handleSaveVitals = async (vitals: { bloodPressure: string; heartRate: numb
       )}
 
       {/* ── Tabs ── */}
-      <div style={{ display: "flex", gap: 4, marginBottom: 18, background: "#F3F4F6", borderRadius: 10, padding: 4, width: "fit-content" }}>
+      <div className="note-tabs" style={{ display: "flex", gap: 4, marginBottom: 18, background: "#F3F4F6", borderRadius: 10, padding: 4, width: "fit-content" }}>
         {(["notes", "chat"] as const).map(tab => (
           <button
             key={tab}
@@ -748,7 +749,7 @@ const handleSaveVitals = async (vitals: { bloodPressure: string; heartRate: numb
           </div>
 
           {/* Input */}
-          <div style={{ display: "flex", gap: 10 }}>
+          <div className="patient-chat-input" style={{ display: "flex", gap: 10 }}>
             <input
               type="text"
               value={chatInput}

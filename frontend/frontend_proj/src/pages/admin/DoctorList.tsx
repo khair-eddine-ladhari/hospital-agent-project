@@ -57,12 +57,12 @@ export default function DoctorList() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-100 px-8 py-5 flex items-center justify-between">
+      <div className="admin-header bg-white border-b border-gray-100 px-4 sm:px-8 py-5 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-semibold text-gray-900">Doctors</h1>
           <p className="text-sm text-gray-400 mt-0.5">{doctors.length} registered</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="admin-header-actions flex items-center gap-3">
           <button
             onClick={() => { ctx?.logout(); }}
             className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
@@ -78,7 +78,7 @@ export default function DoctorList() {
         </div>
       </div>
 
-      <div className="px-8 py-6 max-w-5xl mx-auto">
+      <div className="px-4 sm:px-8 py-6 max-w-5xl mx-auto">
         {/* Search */}
         <div className="relative mb-6">
           <svg
@@ -103,7 +103,7 @@ export default function DoctorList() {
         ) : filtered.length === 0 ? (
           <div className="text-center py-20 text-gray-400 text-sm">No doctors found.</div>
         ) : (
-          <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+          <div className="admin-table-wrap bg-white rounded-xl border border-gray-100 overflow-hidden">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100">

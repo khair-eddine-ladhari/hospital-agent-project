@@ -135,14 +135,14 @@ const handleDeletePatient = async (patientId: string, e: React.MouseEvent) => {
       </div>
 
       {/* ── Stat cards ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 28 }}>
+      <div className="dashboard-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 28 }}>
         {[
           { label: "Total patients", value: stats.total, icon: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8z", color: "#1D9E75", bg: "#E1F5EE" },
           { label: "Stable", value: stats.stable, icon: "M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4 12 14.01l-3-3", color: "#0F6E56", bg: "#E1F5EE" },
           { label: "Follow-up", value: stats.followUp, icon: "M12 2v20M2 12h20", color: "#B45309", bg: "#FEF9EC" },
           { label: "Critical", value: stats.critical, icon: "M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01", color: "#DC2626", bg: "#FEF2F2" },
         ].map(({ label, value, icon, color, bg }) => (
-          <div key={label} style={{
+          <div key={label} className="dashboard-stats-card" style={{
             background: "white", borderRadius: 12,
             border: "1px solid #E5E7EB", padding: "16px 18px",
             display: "flex", alignItems: "center", gap: 14,
@@ -164,7 +164,7 @@ const handleDeletePatient = async (patientId: string, e: React.MouseEvent) => {
       </div>
 
       {/* ── Toolbar ── */}
-      <div style={{
+      <div className="dashboard-toolbar" style={{
         display: "flex", alignItems: "center", gap: 12,
         marginBottom: 18, flexWrap: "wrap",
       }}>
@@ -258,6 +258,7 @@ const handleDeletePatient = async (patientId: string, e: React.MouseEvent) => {
             const s = STATUS_STYLE[patient.status] || STATUS_STYLE.stable;
             return (
               <div
+                className="patient-row"
                 key={patient._id}
                 onClick={() => navigate(`/doctor/patient/${patient._id}`)}
                 style={{
@@ -306,7 +307,7 @@ const handleDeletePatient = async (patientId: string, e: React.MouseEvent) => {
                 </div>
 
                 {/* Meta */}
-                <div style={{ textAlign: "right", flexShrink: 0 }}>
+                <div className="patient-row-meta" style={{ textAlign: "right", flexShrink: 0 }}>
                   <p style={{ fontSize: 12, color: "#9CA3AF", margin: "0 0 4px" }}>
                     Last visit: {patient.lastVisit ? new Date(patient.lastVisit).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "—"}
                   </p>
@@ -317,7 +318,7 @@ const handleDeletePatient = async (patientId: string, e: React.MouseEvent) => {
 
                 {/* Arrow */}
                {/* Delete button + Arrow */}
-<div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+<div className="patient-row-actions" style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
   <button
     onClick={(e) => handleDeletePatient(patient._id, e)}
     style={{

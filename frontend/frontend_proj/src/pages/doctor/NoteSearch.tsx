@@ -133,7 +133,7 @@ export default function NoteSearch() {
         </p>
       </div>
 
-      <div style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
+      <div className="note-search-shell" style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
 
         {/* ── LEFT: Search + Results ── */}
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -146,7 +146,7 @@ export default function NoteSearch() {
             <p style={{ fontSize: 12, fontWeight: 600, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: ".06em", margin: "0 0 10px" }}>
               Ask a question
             </p>
-            <div style={{ display: "flex", gap: 10 }}>
+            <div className="note-search-form" style={{ display: "flex", gap: 10 }}>
               <input
                 ref={inputRef}
                 className="search-input"
@@ -265,7 +265,7 @@ export default function NoteSearch() {
                         onClick={() => setExpandedSrc(expandedSrc === src.noteId ? null : src.noteId)}
                       >
                         {/* Source header */}
-                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                        <div className="source-header" style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
                           {/* Patient avatar */}
                           <div style={{
                             width: 32, height: 32, borderRadius: "50%", background: "#E1F5EE",
@@ -285,7 +285,7 @@ export default function NoteSearch() {
                             </p>
                           </div>
 
-                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <div className="source-actions" style={{ display: "flex", alignItems: "center", gap: 8 }}>
                             {src.score != null && <ScoreBadge score={src.score} />}
                             <svg
                               width="14" height="14" fill="none" stroke="#9CA3AF" strokeWidth="2"
@@ -353,7 +353,7 @@ export default function NoteSearch() {
         </div>
 
         {/* ── RIGHT: Search history ── */}
-        <div style={{ width: 240, flexShrink: 0 }}>
+        <div className="note-search-history" style={{ width: 240, flexShrink: 0 }}>
           <div style={{
             background: "white", borderRadius: 14, border: "1px solid #E5E7EB",
             padding: 16,

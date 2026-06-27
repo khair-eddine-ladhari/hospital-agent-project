@@ -89,6 +89,7 @@ export default function EditVitalsModal({ open, onClose, onSave, current }: Edit
       }}
     >
       <div
+        className="responsive-modal"
         onClick={e => e.stopPropagation()}
         style={{
           background: "white", borderRadius: 16,
@@ -139,7 +140,7 @@ export default function EditVitalsModal({ open, onClose, onSave, current }: Edit
             Vitals
           </p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 20 }}>
+          <div className="vitals-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 20 }}>
             {/* Blood Pressure */}
             <div>
               <label style={{ fontSize: 12, fontWeight: 500, color: "#6B7280", display: "block", marginBottom: 6 }}>
@@ -224,7 +225,7 @@ export default function EditVitalsModal({ open, onClose, onSave, current }: Edit
             Patient Status
           </p>
 
-          <div style={{ display: "flex", gap: 10, marginBottom: 24 }}>
+          <div className="status-options" style={{ display: "flex", gap: 10, marginBottom: 24 }}>
             {STATUS_OPTIONS.map(opt => (
               <button
                 key={opt.value}
@@ -277,7 +278,7 @@ export default function EditVitalsModal({ open, onClose, onSave, current }: Edit
           )}
 
           {/* Actions */}
-          <div style={{ display: "flex", gap: 10 }}>
+          <div className="modal-actions" style={{ display: "flex", gap: 10 }}>
             <button
               onClick={onClose}
               style={{

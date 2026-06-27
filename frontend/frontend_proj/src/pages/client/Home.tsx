@@ -274,7 +274,7 @@ export default function Home() {
       
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="max-w-3xl mx-auto px-6 pt-24 pb-16 text-center">
+      <section className="home-hero max-w-3xl mx-auto px-6 pt-24 pb-16 text-center">
         <Reveal>
           <span className="inline-flex items-center gap-2 text-xs font-medium text-teal-700 bg-teal-50 border border-teal-200 px-4 py-1.5 rounded-full mb-8">
             <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
@@ -335,10 +335,10 @@ export default function Home() {
       </div>
 
       {/* ── FEATURES ─────────────────────────────────────────────────────── */}
-      <section className="px-10 py-24">
+      <section className="home-section px-10 py-24">
         <Reveal dir="left" className="mb-12">
           <p className="text-xs font-medium text-teal-600 uppercase tracking-widest mb-3">Features</p>
-          <h2 className="text-4xl font-medium leading-tight tracking-tight">Everything your<br />clinical team needs</h2>
+          <h2 className="home-heading text-4xl font-medium leading-tight tracking-tight">Everything your<br />clinical team needs</h2>
           <p className="text-gray-500 mt-3 max-w-md leading-relaxed">From AI-structured notes to semantic cross-patient search — built for hospitals that can't afford to slow down.</p>
         </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border border-gray-100 rounded-2xl overflow-hidden">
@@ -355,10 +355,10 @@ export default function Home() {
       </section>
 
       {/* ── HOW IT WORKS ─────────────────────────────────────────────────── */}
-      <section className="bg-gray-50 px-10 py-24">
+      <section className="home-section bg-gray-50 px-10 py-24">
         <Reveal className="mb-12">
           <p className="text-xs font-medium text-teal-600 uppercase tracking-widest mb-3">How it works</p>
-          <h2 className="text-4xl font-medium leading-tight tracking-tight">
+          <h2 className="home-heading text-4xl font-medium leading-tight tracking-tight">
             From consultation to confirmed note<br />in under 2 minutes
           </h2>
         </Reveal>
@@ -374,10 +374,10 @@ export default function Home() {
       </section>
 
       {/* ── TESTIMONIALS ─────────────────────────────────────────────────── */}
-      <section className="px-10 py-24">
+      <section className="home-section px-10 py-24">
         <Reveal className="mb-12">
           <p className="text-xs font-medium text-teal-600 uppercase tracking-widest mb-3">Testimonials</p>
-          <h2 className="text-4xl font-medium leading-tight tracking-tight">Trusted by clinicians</h2>
+          <h2 className="home-heading text-4xl font-medium leading-tight tracking-tight">Trusted by clinicians</h2>
         </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {TESTIMONIALS.map((t, i) => (
@@ -408,10 +408,10 @@ export default function Home() {
       </section>
 
       {/* ── CHAT DEMO ────────────────────────────────────────────────────── */}
-      <section className="px-10 pb-24">
+      <section className="home-section px-10 pb-24">
         <Reveal className="text-center mb-10">
           <p className="text-xs font-medium text-teal-600 uppercase tracking-widest mb-3">Live demo</p>
-          <h2 className="text-4xl font-medium tracking-tight">Talk to our assistant</h2>
+          <h2 className="home-heading text-4xl font-medium tracking-tight">Talk to our assistant</h2>
           <p className="text-gray-500 mt-3 text-sm">Available 24/7 for patients and visitors.</p>
         </Reveal>
         <Reveal dir="scale">
@@ -420,7 +420,7 @@ export default function Home() {
       </section>
 
       {/* ── CTA BANNER ───────────────────────────────────────────────────── */}
-      <div className="mx-10 mb-24">
+      <div className="home-cta mx-10 mb-24">
         <Reveal dir="scale">
           <div className="bg-teal-600 rounded-2xl px-10 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
@@ -444,7 +444,7 @@ export default function Home() {
           </div>
           <span className="text-sm font-medium">MediCare AI</span>
         </div>
-        <div className="flex gap-6">
+        <div className="home-footer-links flex gap-6">
           {["Privacy", "Terms", "Contact", "Docs"].map((l) => (
             <a key={l} href="#" className="text-sm text-gray-400 hover:text-gray-700 transition-colors">{l}</a>
           ))}

@@ -69,6 +69,7 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
 
       {/* ── Sidebar ── */}
       <aside
+        className={`doctor-layout-sidebar ${mobileOpen ? "is-open" : ""}`}
         style={{
           width: SIDEBAR_W,
           minHeight: "100vh",
@@ -109,6 +110,7 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
+            className="desktop-collapse-button"
             style={{
               background: "rgba(255,255,255,0.1)", border: "none", borderRadius: 6,
               width: 28, height: 28, cursor: "pointer", color: "white",
@@ -170,6 +172,7 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
                   transition: "background 0.15s, color 0.15s",
                   whiteSpace: "nowrap",
                 }}
+                onClick={() => setMobileOpen(false)}
                 onMouseEnter={e => {
                   if (!active) e.currentTarget.style.background = "rgba(255,255,255,0.1)";
                   e.currentTarget.style.color = "white";
@@ -256,9 +259,9 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
         transition: "margin-left 0.25s cubic-bezier(.4,0,.2,1)",
         display: "flex",
         flexDirection: "column",
-      }}>
+      }} className="doctor-layout-main">
         {/* Top bar */}
-        <header style={{
+        <header className="doctor-layout-header" style={{
           height: 56,
           background: "white",
           borderBottom: "1px solid #E5E7EB",
@@ -270,13 +273,34 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
           top: 0,
           zIndex: 30,
         }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <button
+            className="mobile-menu-button"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open menu"
+            style={{
+              display: "none",
+              width: 36,
+              height: 36,
+              borderRadius: 8,
+              border: "1px solid #E5E7EB",
+              background: "white",
+              color: "#374151",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <div className="doctor-layout-date" style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#1D9E75" }} />
             <span style={{ fontSize: 13, color: "#6B7280" }}>
               {new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
             </span>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginLeft: "auto" }}>
             <div style={{
               display: "inline-flex", alignItems: "center", gap: 6,
               background: "#E1F5EE", borderRadius: 20, padding: "4px 10px",
@@ -288,7 +312,7 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
         </header>
 
         {/* Page content */}
-       <div style={{ flex: 1, padding: "28px 28px" }}>
+       <div className="doctor-layout-content" style={{ flex: 1, padding: "28px 28px" }}>
   {children}
 </div>
       </main>

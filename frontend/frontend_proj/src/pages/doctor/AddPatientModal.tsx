@@ -71,6 +71,7 @@ export default function AddPatientModal({ open, onClose, onAdd }: AddPatientModa
 
       {/* Modal */}
       <div
+        className="responsive-modal"
         style={{
           position: "fixed",
           top: "50%", left: "50%",
@@ -215,7 +216,7 @@ export default function AddPatientModal({ open, onClose, onAdd }: AddPatientModa
           )}
 
           {/* Actions */}
-          <div style={{ display: "flex", gap: 10, marginTop: 22 }}>
+          <div className="modal-actions" style={{ display: "flex", gap: 10, marginTop: 22 }}>
             <button
               onClick={onClose}
               style={{

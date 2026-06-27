@@ -18,3 +18,221 @@ input[type="reset"],
 .btn {
   cursor: pointer;
 }
+
+html,
+body,
+#root {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .site-nav {
+    padding: 0.875rem 1rem !important;
+    gap: 0.75rem;
+  }
+
+  .site-nav-brand {
+    min-width: 0;
+  }
+
+  .doctor-layout-sidebar {
+    width: min(82vw, 280px) !important;
+    transform: translateX(-105%);
+    transition: transform 0.25s ease, width 0.25s ease !important;
+  }
+
+  .doctor-layout-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .doctor-layout-main {
+    margin-left: 0 !important;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .doctor-layout-header {
+    height: auto !important;
+    min-height: 56px;
+    padding: 0.625rem 1rem !important;
+    gap: 0.75rem;
+  }
+
+  .doctor-layout-date {
+    display: none !important;
+  }
+
+  .doctor-layout-content {
+    padding: 1rem !important;
+    min-width: 0;
+  }
+
+  .mobile-menu-button {
+    display: inline-flex !important;
+  }
+
+  .desktop-collapse-button {
+    display: none !important;
+  }
+
+  .mobile-overlay {
+    display: block !important;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dashboard-toolbar,
+  .patient-row,
+  .patient-header-card,
+  .note-search-shell,
+  .note-search-form,
+  .source-header,
+  .patient-chat-input,
+  .doctor-form-actions,
+  .admin-header,
+  .modal-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .patient-row {
+    gap: 0.75rem !important;
+  }
+
+  .patient-row-meta {
+    text-align: left !important;
+    width: 100%;
+  }
+
+  .patient-row-actions,
+  .source-actions {
+    justify-content: flex-start !important;
+    width: 100%;
+  }
+
+  .patient-vitals {
+    width: 100%;
+  }
+
+  .patient-vitals > div {
+    flex: 1 1 30%;
+  }
+
+  .note-tabs {
+    width: 100% !important;
+  }
+
+  .note-tabs button {
+    flex: 1;
+  }
+
+  .chat-bubble-user,
+  .chat-bubble-ai {
+    max-width: 88% !important;
+  }
+
+  .note-search-history {
+    width: 100% !important;
+  }
+
+  .admin-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-table-wrap table {
+    min-width: 680px;
+  }
+
+  .doctor-form-container {
+    max-width: none !important;
+    padding: 1rem !important;
+  }
+
+  .doctor-form-header {
+    padding: 1rem !important;
+    align-items: flex-start !important;
+  }
+
+  .schedule-row,
+  .vitals-grid,
+  .status-options {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    align-items: stretch !important;
+  }
+
+  .schedule-row > span {
+    text-align: center;
+  }
+
+  .responsive-modal {
+    width: calc(100vw - 2rem) !important;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto !important;
+  }
+
+  .home-section {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .home-hero {
+    padding-top: 4rem !important;
+  }
+
+  .home-hero h1 {
+    font-size: 2.5rem !important;
+    line-height: 1.08 !important;
+  }
+
+  .home-heading {
+    font-size: 2rem !important;
+    line-height: 1.15 !important;
+  }
+
+  .home-cta {
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
+  }
+
+  .home-cta > div {
+    padding: 1.5rem !important;
+    align-items: stretch !important;
+  }
+
+  .home-footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .dashboard-stats-card {
+    padding: 0.875rem !important;
+  }
+
+  .admin-header-actions,
+  .admin-header-actions button {
+    width: 100%;
+  }
+
+  .login-panel {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
