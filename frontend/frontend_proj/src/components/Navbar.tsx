@@ -18,21 +18,10 @@ const Navbar = () => {
           </div>
           <span className="text-base font-medium">MediCare AI</span>
         </div>
-        <div className="hidden md:flex items-center gap-8">
-          {[ "Our Services ", "Our Doctors", "Contact Us"].map((l) => (
-            <a key={l} href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">{l}</a>
-          ))}
-        </div>
+   
         <div className="flex items-center gap-3">
           
-         {!user && (
-  <button
-    className="text-sm text-gray-500 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
-    onClick={() => navigate("/doctor/login")}
-  >
-    Doctor Portal
-  </button>
-)}
+ 
           
           <button className="text-sm font-medium bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors" onClick={() => navigate("/login")}>
             Doctor Portal

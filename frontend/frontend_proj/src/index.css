@@ -9,3 +9,12 @@
   --color-teal-600: #1D9E75;
   --color-teal-700: #0F6E56;
 }
+
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.btn {
+  cursor: pointer;
+}
