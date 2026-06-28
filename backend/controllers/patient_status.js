@@ -1,6 +1,6 @@
 import axios from "axios";
 import Patient from "../models/Patient.js";
-import Chat from "../models/Chat.js";
+import Chat from "../models/chat.js";
 
 const PYTHON_SERVICE_URL = "http://localhost:5001";
 const MAX_HISTORY = 10;
