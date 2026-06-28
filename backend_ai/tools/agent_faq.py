@@ -130,12 +130,15 @@ HOSPITAL INFORMATION:
 """
 
 
-def answer_general_info(question):
+def answer_general_info(question, history=[]):
     system_prompt = build_general_info_prompt()
-    messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": question},
-    ]
+    messages = [{"role": "system", "content": system_prompt}]
+    
+    # Inject conversation history
+    for msg in history:
+        messages.append({"role": msg["role"], "content": msg["content"]})
+    
+    messages.append({"role": "user", "content": question})
 
     if count_tokens(messages) > MAX_TOKENS:
         return {"answer": "Your question is too long, please simplify it."}
@@ -148,13 +151,8 @@ def answer_general_info(question):
     except (json.JSONDecodeError, TypeError):
         return {"answer": raw}
 
-
 # --- The agent entry point: classify -> route -> answer ---------------------
-def handle_question(question, lookup_doctor_fn):
-    """
-    lookup_doctor_fn: a function(name) -> dict|None, supplied by the caller
-    (Node backend or a pymongo query) so this service stays DB-agnostic.
-    """
+def handle_question(question, lookup_doctor_fn, history=[]):
     intent = classify_intent(question)
 
     if intent == "doctor_schedule":
@@ -176,8 +174,7 @@ def handle_question(question, lookup_doctor_fn):
             "answer": f"Dr. {doctor['name']} ({doctor.get('specialty', 'N/A')}) is available: {schedule_text}"
         }
 
-    return answer_general_info(question)
-
+    return answer_general_info(question, history)
 
 # --- Routes -------------------------------------------------------------------
 @app.route("/health", methods=["GET"])
@@ -190,6 +187,10 @@ def services_chat():
     body = request.get_json(silent=True) or {}
     query = body.get("query")
     doctors = body.get("doctors") or []  # Node sends matching candidates, or full list
+    history = body.get("history") or []
+    
+
+    app.logger.info(f"history received: {history}")
 
     if not query or not isinstance(query, str) or not query.strip():
         return jsonify({"error": "query is required"}), 400
@@ -202,12 +203,14 @@ def services_chat():
         return None
 
     try:
-        result = handle_question(query, lookup_doctor_fn)
+        result = handle_question(query, lookup_doctor_fn, history)
     except Exception as e:
         app.logger.error(f"Groq call failed: {e}")
         return jsonify({"error": "AI service failed"}), 502
 
     return jsonify({"response": result})
+
+
 
 
 if __name__ == "__main__":

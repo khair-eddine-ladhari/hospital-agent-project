@@ -8,7 +8,7 @@ import sanitizeHtml from 'sanitize-html'
 import connectDB from './config/db.js'
 import structuringRouter from './controllers/diagnostics.js'
 import timelineRouter from "./controllers/timeline.js"
-import { servicesChatRouter, clearServicesHistoryRouter } from "./controllers/agent_faq.js"
+import { servicesChatRouter } from "./controllers/agent_faq.js"
 import { searchNotesRouter } from "./controllers/rag.js"
 import confirmNoteRouter from "./controllers/confirmdiagnostic.js"
 import authRoutes from "./routes/auth.routes.js"
@@ -96,7 +96,7 @@ app.get( "/api/patient/:patientId/timeline",    ...auth, timelineRouter)
 app.post("/api/doctor/search-notes",            ...auth, searchNotesRouter)
 
 app.post("/api/services-chat",       servicesChatRouter)
-app.post("/api/services-chat/clear", clearServicesHistoryRouter)
+
 
 app.use('/api/auth',  authRoutes)
 app.use('/api/admin', adminRoutes)

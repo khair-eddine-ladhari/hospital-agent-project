@@ -63,7 +63,9 @@ const QUICK_REPLIES: Record<string, string> = {
     "Call +216 71 000 000 or use our online portal. Which department do you need?",
 };
 
+
 function ChatWidget() {
+   const [history, setHistory] = useState<{ role: string; content: string }[]>([]);
   const [messages, setMessages] = useState<Message[]>([
     { role: "bot", text: "Hello! I'm MediCare's virtual assistant. Ask me about doctors, departments, or appointments.", time: now() },
   ]);
@@ -82,39 +84,51 @@ function ChatWidget() {
     setMessages((prev) => [...prev, { role, text, time: now() }]);
   }
 
-  async function handleSend(text: string) {
-    if (!text.trim()) return;
-    setSuggsVisible(false);
-    addMsg(text, "user");
-    setTyping(true);
 
-    // Check quick replies first, otherwise hit the real API
-    const quick = QUICK_REPLIES[text];
-    if (quick) {
-      setTimeout(() => { setTyping(false); addMsg(quick, "bot"); }, 1400);
-      return;
-    }
 
-    try {
-      const res = await axios.post(`${VITE_API_URL}/api/services-chat`, {
-  query: text,
-  history: [],
-});
-      setTyping(false);
-      console.log("API response:", res.data);
-      const reply = res.data.response?.answer 
-  || res.data.response 
-  || res.data.answer 
-  || "I'll connect you with our team. Call +216 71 000 000.";
+async function handleSend(text: string) {
+  if (!text.trim()) return;
+  setSuggsVisible(false);
+  addMsg(text, "user");
+  setTyping(true);
+const quick = QUICK_REPLIES[text];
+if (quick) {
+  setTimeout(() => {
+    setTyping(false);
+    addMsg(quick, "bot");
+    setHistory(prev => [
+      ...prev,
+      { role: "user", content: text },
+      { role: "assistant", content: quick },
+    ]);
+  }, 1400);
+  return;
+}
 
-setTyping(false);
-addMsg(reply, "bot");
+  try {
+    const res = await axios.post(`${VITE_API_URL}/api/services-chat`, {
+      query: text,
+      history, // ← pass current history
+    });
+    setTyping(false);
+    const reply = res.data.response?.answer
+      || res.data.response
+      || res.data.answer
+      || "I'll connect you with our team. Call +216 71 000 000.";
 
-    } catch {
-      setTyping(false);
-      addMsg("I'm having trouble connecting. Please call +216 71 000 000 for immediate help.", "bot");
-    }
+    addMsg(reply, "bot");
+
+    // Update history after successful response
+    setHistory(prev => [
+      ...prev,
+      { role: "user", content: text },
+      { role: "assistant", content: reply },
+    ]);
+  } catch {
+    setTyping(false);
+    addMsg("I'm having trouble connecting. Please call +216 71 000 000.", "bot");
   }
+}
 
  useEffect(() => {
   if (messages.length <= 1) return; // don't scroll on initial load
