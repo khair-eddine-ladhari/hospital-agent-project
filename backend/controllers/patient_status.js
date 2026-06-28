@@ -2,7 +2,7 @@ import axios from "axios";
 import Patient from "../models/Patient.js";
 import Chat from "../models/chat.js";
 
-const PYTHON_SERVICE_URL = "http://localhost:5001";
+const PYTHON_SERVICE_URL = process.env.AI_SERVICE_URL;
 const MAX_HISTORY = 10;
 
 // GET /api/doctor/patient/:id/chat  — load history

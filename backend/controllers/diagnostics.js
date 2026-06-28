@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const NOTE_SERVICE_URL = "http://localhost:5002";
+const NOTE_SERVICE_URL = process.env.AI_SERVICE_URL;
+console.log("AI_SERVICE_URL:", process.env.AI_SERVICE_URL);
 
 const structuringRouter = async (req, res) => {
   try {

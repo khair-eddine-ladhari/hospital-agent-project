@@ -1,7 +1,7 @@
 import axios from "axios";
 import User from "../models/User.js";
 
-const SERVICES_AGENT_URL = "http://localhost:5003";
+const SERVICES_AGENT_URL =process.env.AI_SERVICE_URL;
 
 const servicesChatRouter = async (req, res) => {
   try {

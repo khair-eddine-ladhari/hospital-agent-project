@@ -1,6 +1,8 @@
+import './config/env.js'
+
 import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv'
+
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 import sanitizeHtml from 'sanitize-html'
@@ -17,7 +19,7 @@ import passport from "./middleware/passport.js"
 import rolesMiddleware from "./middleware/roles.middleware.js"
 import adminRoutes from './routes/admin.router.js'
 
-dotenv.config()
+
 connectDB()
 
 const app = express()

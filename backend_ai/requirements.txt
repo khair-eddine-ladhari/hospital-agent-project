@@ -1,0 +1,8 @@
+flask
+python-dotenv
+groq
+tenacity
+tiktoken
+requests
+sentence-transformers
+pinecone

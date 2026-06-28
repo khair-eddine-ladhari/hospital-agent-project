@@ -4,7 +4,7 @@
 
 import axios from "axios";
 
-const RAG_SERVICE_URL = process.env.RAG_SERVICE_URL || "http://localhost:5004";
+const RAG_SERVICE_URL =  process.env.AI_SERVICE_URL;
 
 /**
  * Call this from confirmNoteRouter, right after patient.save() succeeds.
