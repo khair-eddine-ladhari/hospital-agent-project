@@ -11,8 +11,8 @@ import GlobalState, { GlobalContext } from "./context/AuthContext.tsx";
 import PatientDetail from "./pages/doctor/PatientDetail.tsx";
 import NotesResearch from "./pages/doctor/NoteSearch.tsx";
 
-import DoctorForm from "./pages/admin/Doctorform.tsx";
-import DoctorList from "./pages/admin/Doctorlist.tsx";
+import DoctorForm from "./pages/admin/doctorform.tsx";
+import DoctorList from "./pages/admin/doctorlist.tsx";
 
 function AppRoutes() {
   const { user, loading } = useContext(GlobalContext)!;
