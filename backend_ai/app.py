@@ -8,7 +8,6 @@ from flask import Flask, request, jsonify
 from groq import Groq
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 import tiktoken
-from sentence_transformers import SentenceTransformer
 from pinecone import Pinecone, ServerlessSpec
 
 # ─── Config ───────────────────────────────────────────────────────────────────
@@ -20,16 +19,14 @@ PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
 PINECONE_INDEX   = os.environ.get("PINECONE_INDEX", "doctor-notes")
 GROQ_MODEL       = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
 MAX_TOKENS       = 6000
+EMBED_DIM        = 1024  # multilingual-e5-large output dimension
 
 client   = Groq(api_key=GROQ_API_KEY)
 encoding = tiktoken.encoding_for_model("gpt-4o-mini")
 
 app = Flask(__name__)
 
-# ─── Pinecone + Embedder (RAG) ────────────────────────────────────────────────
-embedder  = SentenceTransformer("all-MiniLM-L6-v2")
-EMBED_DIM = 384
-
+# ─── Pinecone setup ───────────────────────────────────────────────────────────
 pc = Pinecone(api_key=PINECONE_API_KEY)
 existing_indexes = [idx["name"] for idx in pc.list_indexes()]
 if PINECONE_INDEX not in existing_indexes:
@@ -40,6 +37,16 @@ if PINECONE_INDEX not in existing_indexes:
         spec=ServerlessSpec(cloud="aws", region="us-east-1"),
     )
 pinecone_index = pc.Index(PINECONE_INDEX)
+
+
+# ─── Pinecone inference embedding (no local model needed) ─────────────────────
+def embed_text(text, input_type="passage"):
+    result = pc.inference.embed(
+        model="multilingual-e5-large",
+        inputs=[text],
+        parameters={"input_type": input_type},
+    )
+    return result[0].values
 
 
 # ─── Shared helpers ───────────────────────────────────────────────────────────
@@ -93,14 +100,17 @@ def get_patient_response(data_of_patient, question, history=None):
     messages.append({"role": "user", "content": question})
 
     if count_tokens(messages) > MAX_TOKENS:
-        return json.dumps({"answer": "Your message and history are too long, please start a new conversation.", "opinion": None})
+        return json.dumps({
+            "answer": "Your message and history are too long, please start a new conversation.",
+            "opinion": None,
+        })
 
     response = call_groq(messages, max_tokens=1000)
     return response.choices[0].message.content
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    body = request.get_json(silent=True) or {}
+    body         = request.get_json(silent=True) or {}
     query        = body.get("query")
     patient_data = body.get("patientData")
     history      = body.get("history") or []
@@ -190,20 +200,23 @@ def get_icd_code_from_nlm(diagnosis_text):
 
 def structure_note(note_text):
     try:
-        response  = call_groq_tool(note_text)
+        response   = call_groq_tool(note_text)
         tool_calls = response.choices[0].message.tool_calls
         if not tool_calls:
-            return {"symptoms": [], "diagnosis": [], "medications": [], "icd10": None, "error": "Model did not return structured data."}
-        args      = json.loads(tool_calls[0].function.arguments)
-        symptoms  = args.get("symptoms", []) or []
-        diagnosis = args.get("diagnosis", []) or []
+            return {"symptoms": [], "diagnosis": [], "medications": [], "icd10": None,
+                    "error": "Model did not return structured data."}
+        args        = json.loads(tool_calls[0].function.arguments)
+        symptoms    = args.get("symptoms", []) or []
+        diagnosis   = args.get("diagnosis", []) or []
         medications = args.get("medications", []) or []
     except Exception as e:
         app.logger.error(f"Groq extraction failed: {e}")
-        return {"symptoms": [], "diagnosis": [], "medications": [], "icd10": None, "error": "Extraction failed."}
+        return {"symptoms": [], "diagnosis": [], "medications": [], "icd10": None,
+                "error": "Extraction failed."}
 
     icd10 = get_icd_code_from_nlm(diagnosis[0]) if diagnosis else None
-    return {"symptoms": symptoms, "diagnosis": diagnosis, "medications": medications, "icd10": icd10}
+    return {"symptoms": symptoms, "diagnosis": diagnosis,
+            "medications": medications, "icd10": icd10}
 
 @app.route("/structure-note", methods=["POST"])
 def structure_note_route():
@@ -390,7 +403,7 @@ def index_note():
         if not note_id or not patient_id or not content.strip():
             return jsonify({"message": "noteId, patientId and content are required"}), 400
 
-        vector = embedder.encode(content).tolist()
+        vector = embed_text(content, input_type="passage")
         pinecone_index.upsert(vectors=[{
             "id": str(note_id),
             "values": vector,
@@ -417,7 +430,7 @@ def search_notes():
         if not question:
             return jsonify({"message": "question is required"}), 400
 
-        query_vector = embedder.encode(question).tolist()
+        query_vector = embed_text(question, input_type="query")
         results      = pinecone_index.query(
             vector=query_vector,
             top_k=top_k,

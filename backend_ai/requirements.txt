@@ -4,5 +4,4 @@ groq
 tenacity
 tiktoken
 requests
-sentence-transformers
 pinecone
