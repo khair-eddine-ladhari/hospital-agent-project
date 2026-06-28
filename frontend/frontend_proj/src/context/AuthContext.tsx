@@ -1,6 +1,7 @@
-import { createContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useState, useEffect} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { type ReactNode } from "react";
 
 interface User {
   _id: string;
