@@ -8,20 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const VITE_API_URL=import.meta.env.VITE_API_URL
 // ─── Scroll reveal hook ───────────────────────────────────────────────────────
-function useReveal() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) el.classList.add("visible"); },
-      { threshold: 0.15 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return ref;
-}
+
 
 // ─── Animated counter ────────────────────────────────────────────────────────
 function StatCounter({ target, suffix }: { target: number; suffix: string }) {

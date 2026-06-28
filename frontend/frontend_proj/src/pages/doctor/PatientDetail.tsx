@@ -114,7 +114,7 @@ export default function PatientDetail() {
   const [loadingNotes, setLoadingNotes] = useState(false);
   const [rawNote, setRawNote] = useState("");
   const [structuring, setStructuring] = useState(false);
-  const [structured, setStructured] = useState<StructuredNote | null>(null);
+  const [_structured, setStructured] = useState<StructuredNote | null>(null);
   const [editableStructured, setEditableStructured] = useState<StructuredNote | null>(null);
   const [savingNote, setSavingNote] = useState(false);
   const [noteStep, setNoteStep] = useState<"write" | "review">("write");

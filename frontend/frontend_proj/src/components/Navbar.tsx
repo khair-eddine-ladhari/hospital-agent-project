@@ -6,7 +6,7 @@ import { GlobalContext } from "../context/AuthContext.tsx";
 
 
 const Navbar = () => {
-  const { user } = useContext(GlobalContext)!;
+  
   const navigate = useNavigate();
     return (
       <nav className="site-nav sticky top-0 z-50 flex items-center justify-between px-10 py-4 bg-white/95 backdrop-blur border-b border-gray-100">

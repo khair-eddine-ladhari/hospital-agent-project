@@ -58,7 +58,7 @@ function ScoreBadge({ score }: { score: number }) {
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function NoteSearch() {
-  const { user } = useContext(GlobalContext)!;
+  
   const token = sessionStorage.getItem("token");
 
   const [question, setQuestion]       = useState("");
